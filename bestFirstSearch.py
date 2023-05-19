@@ -1,9 +1,8 @@
-
 import heapq
 import math
 
-class Graph_astar:
-    def __init__(self, directed):
+class Graph_bestfirst:
+    def __init__(self, directed = False):
         self.graph = {}
         self.directed = directed
 
@@ -36,12 +35,12 @@ class Graph_astar:
         self.H[node] = heuristic
         return heuristic
 
-    def a_star_search(self, start, goals):
-        queue = [(0, start, [start])]
+    def best_first_search(self, start, goals):
+        queue = [(self.heuristic(start, goals[0]), start, [start])]
         visited = set()
         cost = {start: 0}
         while queue:
-            (priority, current, path) = heapq.heappop(queue)
+            (_, current, path) = heapq.heappop(queue)
             if current in visited:
                 continue
             visited.add(current)
@@ -52,12 +51,11 @@ class Graph_astar:
                     new_cost = cost[current] + self.graph[current][neighbor]
                     if neighbor not in visited or new_cost < cost.get(neighbor, math.inf):
                         cost[neighbor] = new_cost
-                        priority = new_cost + self.heuristic(neighbor, goals[0])
-                        heapq.heappush(queue, (priority, neighbor, path + [neighbor]))
+                        heapq.heappush(queue, (self.heuristic(neighbor, goals[0]), neighbor, path + [neighbor]))
         return None, None, None
 
 
-g = Graph_astar(directed=False)
+g = Graph_bestfirst(directed=False)
 
 g.add_edge('S', 'F', 99)
 g.add_edge('S', 'R', 80)
@@ -70,4 +68,4 @@ heuristics = {'S': 253, 'F': 176, 'R': 193, 'P': 100, 'B': 0}
 start = 'S'
 goal = 'B'
 g.set_huristics(heuristics)
-print(g.a_star_search(start, goal))
+print(g.best_first_search(start, goal))
