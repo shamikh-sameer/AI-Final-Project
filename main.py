@@ -1,12 +1,23 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
+import heapq
+# from zz import Graph_bfs1
 from matplotlib.widgets import *
 from PyQt5.QtWidgets import QMessageBox
 import sys
 from bfs import Graph_bfs
 from dfs import Graph_dfs
+from ucs import Graph_ucs
+from bestFirstSearch import Graph_bestfirst
 from astar import Graph_astar
+
+# from bidirectional import Graph_bidirectional
+# from iterative import Graph_idfs
+
+# from hillclimb import Graph_hillClimb
+# from bestfirstsearch import Graph_bestFirstSearch
+# from simulated_anneling import Graph_simulatedAnnealing
 
 DG = nx.DiGraph()
 G = nx.Graph()
@@ -23,6 +34,7 @@ class Ui_AISearchingTechniquesMainWindow(object):
     H = {}
     graphastar = Graph_astar(directed=False)
     graphastarD = Graph_astar(directed=True)
+    graphbest = Graph_bestfirst(directed=False)
 
     def GeneratePathClicked(self):
         original_stdout = sys.stdout  # Save a reference to the original standard output
@@ -38,7 +50,7 @@ class Ui_AISearchingTechniquesMainWindow(object):
                         graphbfs.add_edge(Node1_arr[i], Node2_arr[i])
                     start = self.StartNode_input.text()
                     goals = Goal_list
-                    traced_path1, goal = graphbfs.breadth_first_search(start, goals)
+                    traced_path1, goal = graphbfs.bfs(start, goals)
                     if (traced_path1):
                         print('Path:', end=' ')
                         Graph_bfs.print_path(traced_path1, goal)
@@ -50,11 +62,36 @@ class Ui_AISearchingTechniquesMainWindow(object):
                         graphdfs.add_edge(Node1_arr[i], Node2_arr[i])
                     start = self.StartNode_input.text()
                     goals = Goal_list
-                    traced_path2, goal = graphdfs.depth_first_search(start, goals)
+                    traced_path2, goal = graphdfs.dfs(start, goals)
                     if (traced_path2):
                         print('Path:', end=' ')
                         Graph_dfs.print_path(traced_path2, goal)
+
                         print()
+
+
+                elif searchType == "UCS":
+                    graphucs = Graph_ucs(directed=False)
+                    for i in range(0, self.counter):
+                        graphucs.add_edge(Node1_arr[i], Node2_arr[i], int(self.EdgeWeight_arr[i]))
+                    start = self.StartNode_input.text()
+                    goals = Goal_list
+                    traced_path3, goal = graphucs.ucs(start, goals)
+                    if (traced_path3):
+                        print('Path:', end=' ')
+                        Graph_ucs.print_path(traced_path3, goal)
+                        print()
+
+                elif searchType == "BestFirstSearch":
+                    for i in range(0, self.counter):
+                        self.graphbest.add_edge(Node1_arr[i], Node2_arr[i], int(self.EdgeWeight_arr[i]))
+                    start = self.StartNode_input.text()
+                    goals = Goal_list
+                    traced_path4, cost2, goal = self.graphbest.best_first_search(start, goals)
+                    if (traced_path4):
+                        print('Path:', end=' ')
+                        Graph_bestfirst.print_path(traced_path4, goal)
+                        print("\nCost :", cost2)
 
                 elif searchType == "A*":
                     for i in range(0, self.counter):
@@ -67,6 +104,42 @@ class Ui_AISearchingTechniquesMainWindow(object):
                         Graph_astar.print_path(traced_path5, goal)
                         print('\nCost:', cost3)
 
+                elif searchType == "Bidirectional":
+                    g = Graph_bidirectional(directed=False)
+                    for i in range(0, self.counter):
+                        g.add_edge(Node1_arr[i], Node2_arr[i])
+                    start = self.StartNode_input.text()
+                    goals = Goal_list
+                    print(Graph_bidirectional.bidirectional(start, goals))
+
+
+                elif searchType == "Iterative deepning":
+                    g = Graph_idfs(directed=False)
+                    for i in range(0, self.counter):
+                        g.add_edge(Node1_arr[i], Node2_arr[i])
+                    start = self.StartNode_input.text()
+                    goals = Goal_list
+                    print(Graph_idfs.iterative_deepening(start, goals))
+                    traced_path7, goal = Graph_idfs.iterative_deepening(start, goals)
+                    if (traced_path7):
+                        print('Path:', end=' ')
+                        Graph_astar.print_path(traced_path7, goal)
+
+                    # # if (traced_path6):
+                    # print('Path:', end=' ')
+                    # Graph_bidirectional.print_path(traced_path6)
+                    # print()
+                # elif searchType == "A*":
+                #     for i in range(0, self.counter):
+                #         self.graphastar.add_edge(Node1_arr[i], Node2_arr[i], int(self.EdgeWeight_arr[i]))
+                #     start = self.StartNode_input.text()
+                #     goals = Goal_list
+                #     traced_path5, cost3, goal = self.graphastar.a_star_search(start, goals)
+                #     if (traced_path5):
+                #         print('Path:', end=' ')
+                #         Graph_astar.print_path(traced_path5, goal)
+                #         print('\nCost:', cost3)
+
             else:
                 if searchType == "BFS":
                     graphbfs = Graph_bfs(directed=True)
@@ -74,7 +147,7 @@ class Ui_AISearchingTechniquesMainWindow(object):
                         graphbfs.add_edge(Node1_arr[i], Node2_arr[i])
                     start = self.StartNode_input.text()
                     goals = Goal_list
-                    traced_path1, goal = graphbfs.breadth_first_search(start, goals)
+                    traced_path1, goal = graphbfs.bfs(start, goals)
                     if (traced_path1):
                         print('Path:', end=' ')
                         Graph_bfs.print_path(traced_path1, goal)
@@ -86,22 +159,23 @@ class Ui_AISearchingTechniquesMainWindow(object):
                         graphdfs.add_edge(Node1_arr[i], Node2_arr[i])
                     start = self.StartNode_input.text()
                     goals = Goal_list
-                    traced_path2, goal = graphdfs.depth_first_search(start, goals)
+                    traced_path2, goal = graphdfs.dfs(start, goals)
                     if (traced_path2):
                         print('Path:', end=' ')
                         Graph_dfs.print_path(traced_path2, goal)
                         print()
 
-                elif searchType == "A*":
+                elif searchType == "UCS":
+                    graphucs = Graph_ucs(directed=True)
                     for i in range(0, self.counter):
-                        self.graphastar.add_edge(Node1_arr[i], Node2_arr[i], int(self.EdgeWeight_arr[i]))
+                        graphucs.add_edge(Node1_arr[i], Node2_arr[i], int(self.EdgeWeight_arr[i]))
                     start = self.StartNode_input.text()
                     goals = Goal_list
-                    traced_path5, cost3, goal = self.graphastar.a_star_search(start, goals)
-                    if (traced_path5):
+                    traced_path3, goal = graphucs.ucs(start, goals)
+                    if (traced_path3):
                         print('Path:', end=' ')
-                        Graph_astar.print_path(traced_path5, goal)
-                        print('\nCost:', cost3)
+                        Graph_ucs.print_path(traced_path3, goal)
+                        print()
 
         sys.stdout = original_stdout  # Reset the standard output to its original value
 
@@ -131,6 +205,7 @@ class Ui_AISearchingTechniquesMainWindow(object):
         Node1_arr[self.counter] = N1
         Node2_arr[self.counter] = N2
         self.EdgeWeight_arr[self.counter] = W
+        print(self.EdgeWeight_arr[self.counter])
         self.counter = self.counter + 1
         self.Node1_input.clear()
         self.Node2_input.clear()
@@ -143,6 +218,8 @@ class Ui_AISearchingTechniquesMainWindow(object):
         self.HeuristicDict.update({InputNodeH: InputHeuristic})
         self.graphastar.set_huristics(self.HeuristicDict)
         self.graphastarD.set_huristics(self.HeuristicDict)
+        self.graphbest.set_huristics(self.HeuristicDict)
+        # Graph_hillClimb.set_heuristic_dict(self.HeuristicDict)
         self.Node_Input.clear()
         self.NodeHeuristic_input.clear()
 
@@ -321,6 +398,14 @@ class Ui_AISearchingTechniquesMainWindow(object):
         self.SearchTypecomboBox.setItemText(0, _translate("AISearchingTechniquesMainWindow", "BFS"))
         self.SearchTypecomboBox.setItemText(1, _translate("AISearchingTechniquesMainWindow", "DFS"))
         self.SearchTypecomboBox.setItemText(2, _translate("AISearchingTechniquesMainWindow", "A*"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "Alpha-Beta"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "SimulatedAnneling"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "BestFirstSearch"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "UCS"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "Bidirectional"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "Depth Limited"))
+        self.SearchTypecomboBox.addItem(_translate("AISearchingTechniquesMainWindow", "Iterative deepning"))
+
         self.GenerateGraphButton.setText(_translate("AISearchingTechniquesMainWindow", "Generate Graph"))
         self.Node1Label.setText(_translate("AISearchingTechniquesMainWindow", "Node 1"))
         self.Node2Label.setText(_translate("AISearchingTechniquesMainWindow", "Node 2"))
