@@ -24,7 +24,7 @@ G = nx.Graph()
 Node1_arr = ['A'] * 30
 Node2_arr = ['A'] * 30
 Goal_list = []
-
+depth_limit = 2
 
 class Ui_AISearchingTechniquesMainWindow(object):
     counter = 0

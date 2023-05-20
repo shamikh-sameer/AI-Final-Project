@@ -45,18 +45,18 @@ g = Graph_bfs(directed=False)
 # g.add_edge('D', 'G')
 
 
-g.add_edge('a', 'b')
-g.add_edge('a', 'c')
-g.add_edge('b', 'd')
-g.add_edge('b', 'e')
-g.add_edge('c', 'f')
-g.add_edge('c', 'g')
+# g.add_edge('a', 'b')
+# g.add_edge('a', 'c')
+# g.add_edge('b', 'd')
+# g.add_edge('b', 'e')
+# g.add_edge('c', 'f')
+# g.add_edge('c', 'g')
+#
+#
+# start = 'a'
+# goal = 'f'
 
 
-start = 'a'
-goal = 'f'
-
-
-print(g.bfs(start, goal))
+#print(g.bfs(start, goal))
 
 

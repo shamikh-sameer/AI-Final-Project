@@ -35,7 +35,7 @@ class Graph_dfs:
 
         return [],  None
 
-    def print_path(path, goal):
+    def print_path(self, path, goal):
         print('->'.join(path + [goal]))
 
 g = Graph_dfs(directed=False)
@@ -50,14 +50,14 @@ g = Graph_dfs(directed=False)
 # g.add_edge('D', 'G')
 
 
-g.add_edge('a', 'b')
-g.add_edge('a', 'c')
-g.add_edge('b', 'd')
-g.add_edge('b', 'e')
-g.add_edge('c', 'f')
-g.add_edge('c', 'g')
-
-
-start = 'a'
-goal = 'f'
-print(g.dfs(start, goal))
+# g.add_edge('a', 'b')
+# g.add_edge('a', 'c')
+# g.add_edge('b', 'd')
+# g.add_edge('b', 'e')
+# g.add_edge('c', 'f')
+# g.add_edge('c', 'g')
+#
+#
+# start = 'a'
+# goal = 'f'
+# print(g.dfs(start, goal))

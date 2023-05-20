@@ -57,15 +57,15 @@ class Graph_bestfirst:
 
 g = Graph_bestfirst(directed=False)
 
-g.add_edge('S', 'F', 99)
-g.add_edge('S', 'R', 80)
-g.add_edge('R', 'P', 97)
-g.add_edge('P', 'B', 101)
-g.add_edge('F', 'B', 211)
-
-heuristics = {'S': 253, 'F': 176, 'R': 193, 'P': 100, 'B': 0}
-
-start = 'S'
-goal = 'B'
-g.set_huristics(heuristics)
-print(g.best_first_search(start, goal))
+# g.add_edge('S', 'F', 99)
+# g.add_edge('S', 'R', 80)
+# g.add_edge('R', 'P', 97)
+# g.add_edge('P', 'B', 101)
+# g.add_edge('F', 'B', 211)
+#
+# heuristics = {'S': 253, 'F': 176, 'R': 193, 'P': 100, 'B': 0}
+#
+# start = 'S'
+# goal = 'B'
+# g.set_huristics(heuristics)
+# print(g.best_first_search(start, goal))
